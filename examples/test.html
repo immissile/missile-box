@@ -1,0 +1,74 @@
+<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+<link rel="stylesheet" href="../src/box.css">
+<script src="../node_modules/jquery/dist/jquery.js"></script>
+<style>
+button {
+	padding: 10px 30px;
+}
+</style>
+<script>
+	var module = {};
+</script>
+<script src="../src/box.js"></script>
+
+<br><br>
+<button id="btn1">test 1</button>
+
+<button id="btn2">test 2</button>
+
+
+<button id="test">test close</button>
+
+
+<script>
+	var Box = module.exports;
+		
+	
+	$('#btn1').click(function(){
+		console.log('btn1 click...');
+		
+		var box = new Box({
+			//title: '支付确认',
+			klass: 'ccc-box',
+			animate: 'fadeIn',
+			debug: true,
+			enableOverlay: true,
+			//time: 2000,
+			before: function() {},
+			done: function () {
+				console.log('#######', this);
+				
+			}
+		});
+	});
+	
+	$('#btn2').click(function(){
+		console.log('btn2 click...');
+		
+		var box = new Box({
+			title: '支付确认',
+			klass: 'ccc-box',
+			animate: 'fadeIn',
+			type: 'confirm',
+			//type: 'alert',
+			enableOverlay: false,
+			before: function() {},
+			done: function (obj) {
+				console.log('box.done');
+				console.log('self', obj);
+				$('#test').click(function(){
+					obj.methods.close();
+				});
+			},
+			ok: function (e) {
+				alert('clicked ok btn');
+				console.log(this, e.currentTarget);
+			},
+			cancel: function (e) {
+				alert('clicked cancel btn');
+				console.log(this, e.currentTarget);
+			}
+		});
+		//console.log(box);
+	});
+</script>

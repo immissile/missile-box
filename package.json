@@ -1,0 +1,26 @@
+{
+  "name": "missile-box",
+  "version": "0.0.0",
+  "description": "Flat, responsive, lightweight, fast, easy customizable modal window plugin.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/immissile/missile-box.git"
+  },
+  "keywords": [
+    "modal",
+    "dialog",
+    "box"
+  ],
+  "author": "missile",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/immissile/missile-box/issues"
+  },
+  "devDependencies": {
+    "jquery": "~2.1.3"
+  }
+}
