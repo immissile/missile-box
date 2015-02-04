@@ -6,7 +6,8 @@ if (typeof require != 'undefined') {
 
 module.exports = function(options) {
     var defaults = {
-        title: '操作提示',
+        title: 'Message Tips',
+		subTitle: 'Are you sure to do that?',
 		content: '',
         width: 500,
         height: 250,
@@ -15,20 +16,26 @@ module.exports = function(options) {
 		enableOverlay: true,
         modal: true,
         fixed: true,
+		escClose: true,
         theme: 'default',
         template: null,
+		whenCancleFireClose: true,
         debug: false,
 
-        // 自动关闭时间(毫秒)， 0表示不会自动关闭
+        // auto close. '0' will do nothing
         timeClose: 0,
 
-        // box wrap的扩展class
+        // wrap class
         klass: '',
 		
-		// 弹窗显示动画 default/fadeIn
+		// btn text
+		okText: 'Ok',
+		cancelText: 'Cancel',
+		
+		// default/fadeIn
 		animate: 'default',
 		
-		// box 类型：dialog/alert/confirm
+		// dialog/alert/confirm
 		type: 'dialog',
 
         before: function () {},
@@ -57,7 +64,7 @@ module.exports = function(options) {
 	// parse template
 	this.parseTpl = function () {
 		self.config.template = self.config.template
-			.replace('$content', getTplByType(self.config.type))
+			.replace('$content', getTplByType(self))
 		
 		self.config.template = self.config.template
 			.replace('$klass', self.config.klass)
@@ -130,6 +137,9 @@ module.exports = function(options) {
 		
 		// btn-cancel
 		self.$wrapper.find('.btn-cancel').click(function(e){
+			if (self.config.whenCancleFireClose) {
+				self.methods.close();
+			}
 			self.config.cancel.call(self, e);
 		});
 	};
@@ -156,6 +166,7 @@ module.exports = function(options) {
 		}
 		
 		self.config.done.call(self);
+		
 		if (self.config.debug) {
 			console.log('debug:render');
 		}
@@ -169,6 +180,22 @@ module.exports = function(options) {
 				self.setPosition.call(this);
 			}
 		});
+		
+		if (self.config.escClose) {
+			$(window).keydown(function(e){
+				var tag = e.target.tagName.toLowerCase();
+				if (!e.target) {
+					return false;
+				}
+				if (tag === 'input' || tag === 'textarea') {
+					// TODO
+				} else {
+					if (e.keyCode === 27) {
+						self.methods.close();
+					}
+				}
+			});
+		}
 	};
 	
 	// methods
@@ -178,6 +205,7 @@ module.exports = function(options) {
 		}
 	};
 	
+	this.render.call(this);
 	
 	function getTpl () {
 		return '\
@@ -192,36 +220,36 @@ module.exports = function(options) {
 		</div>';
 	}
 
-	function getTplByType (type) {
+	function getTplByType (o) {
 		var _dialog = '$content';
 		
 		var _confirm = '\
 		<div class="m-box-content">\
-			<h2>确定要删除这条记录吗？</h2>\
+			<h2>$subTitle</h2>\
 			<div class="m-row">\
-				<button class="btn btn-ok">确定</button>\
-				<button class="btn btn-cancel">取消</button>\
+				<button class="btn btn-ok">$okText</button>\
+				<button class="btn btn-cancel">$cancelText</button>\
 			</div>\
 		</div>';
 		
 		var _alert = '\
 		<div class="m-box-content">\
-			<h2>确定要删除这条记录吗？</h2>\
+			<h2>$subTitle</h2>\
 			<div class="m-row">\
-				<button class="btn btn-ok">确定</button>\
+				<button class="btn btn-ok">$okText</button>\
 			</div>\
 		</div>';
 		
 		var tpl = null;
-		switch (type) {
+		switch (o.config.type) {
 			case 'alert': tpl = _alert; break;
 			case 'confirm': tpl = _confirm; break;
 			case 'dialog': tpl = _dialog; break;
 			default: tpl = _dialog;
 		}
-		return tpl;
+		return tpl.replace('$subTitle', o.config.subTitle)
+			.replace('$okText', o.config.okText)
+			.replace('$cancelText', o.config.cancelText);
 	}
-	
-	this.render.call(this);
 };
 

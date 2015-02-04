@@ -12,9 +12,11 @@ button {
 <script src="../src/box.js"></script>
 
 <br><br>
-<button id="btn1">test 1</button>
+<button id="btn1">dialog</button>
 
-<button id="btn2">test 2</button>
+<button id="btn2">alert</button>
+
+<button id="btn3">confirm</button>
 
 
 <button id="test">test close</button>
@@ -27,8 +29,9 @@ button {
 	$('#btn1').click(function(){
 		console.log('btn1 click...');
 		
-		var box = new Box({
+		window.box1 = new Box({
 			//title: '支付确认',
+			content: '<p style="padding: 50px;text-align:center;">hello word</p>',
 			klass: 'ccc-box',
 			animate: 'fadeIn',
 			debug: true,
@@ -40,33 +43,58 @@ button {
 				
 			}
 		});
+		console.log('box1-->', box1);
 	});
 	
 	$('#btn2').click(function(){
-		console.log('btn2 click...');
+		//console.log('btn2 click...');
 		
-		var box = new Box({
-			title: '支付确认',
-			klass: 'ccc-box',
+		var box2 = new Box({
+			title: '消息确认',
+			subTitle: '确定这么做？',
 			animate: 'fadeIn',
-			type: 'confirm',
-			//type: 'alert',
+			type: 'alert',
 			enableOverlay: false,
-			before: function() {},
-			done: function (obj) {
-				console.log('box.done');
-				console.log('self', obj);
-				$('#test').click(function(){
-					obj.methods.close();
-				});
+			before: function() {
+				//console.log('before', this);
+			},
+			done: function () {
+				//console.log('done', this);
 			},
 			ok: function (e) {
 				alert('clicked ok btn');
-				console.log(this, e.currentTarget);
+				//console.log(this, e.currentTarget);
 			},
 			cancel: function (e) {
 				alert('clicked cancel btn');
-				console.log(this, e.currentTarget);
+				//console.log(this, e.currentTarget);
+			}
+		});
+		//console.log(box);
+	});
+	
+	$('#btn3').click(function(){
+		//console.log('btn2 click...');
+		
+		var box2 = new Box({
+			//title: '支付确认',
+			klass: 'ccc-box',
+			animate: 'fadeIn',
+			type: 'confirm',
+			enableOverlay: false,
+			before: function() {
+				//console.log('before', this);
+			},
+			done: function () {
+				//console.log('done', this);
+			},
+			ok: function (e) {
+				alert('clicked ok btn');
+				//console.log(this, e.currentTarget);
+			},
+			cancel: function (e) {
+				alert('clicked cancel btn');
+				//console.log(this, e.currentTarget);
 			}
 		});
 		//console.log(box);
