@@ -7,7 +7,7 @@ if (typeof require != 'undefined') {
 module.exports = function(options) {
     var defaults = {
         title: 'Message Tips',
-		subTitle: 'Are you sure to do that?',
+		subTitle: 'Are you sure you want to do this?',
 		content: '',
         width: 500,
         height: 250,
