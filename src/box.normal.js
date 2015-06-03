@@ -159,7 +159,7 @@ window.Box = function(options) {
 			}, self.config.time);
 		}
 		
-		self.config.done.call(self, $('.m-box-container'));
+		self.config.done.call(self, $('.m-box-container'), self.methods);
 		
 		if (self.config.debug) {
 			console.log('debug:render');
