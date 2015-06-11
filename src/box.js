@@ -27,14 +27,14 @@ module.exports = function(options) {
 
         // wrap class
         klass: '',
-		
+
 		// btn text
 		okText: 'Ok',
 		cancelText: 'Cancel',
-		
+
 		// default/fadeIn
 		animate: 'default',
-		
+
 		// dialog/alert/confirm
 		type: 'dialog',
 
@@ -45,14 +45,14 @@ module.exports = function(options) {
     };
 
     defaults.template = getTpl();
-	
+
 	var self = this;
 
     this.config = $.extend(defaults, options);
     if (this.config.debug) {
         console.log('debug:config', this.config);
     }
-	
+
 	// init
 	this.init = function () {
 		if (self.config.type !== 'dialog') {
@@ -60,28 +60,28 @@ module.exports = function(options) {
 			self.config.height = 210;
 		}
 	};
-	
+
 	// parse template
 	this.parseTpl = function () {
 		self.config.template = self.config.template
 			.replace('$content', getTplByType(self))
-		
+
 		self.config.template = self.config.template
 			.replace('$klass', self.config.klass)
 				.replace('$title', self.config.title)
 				.replace('$content', self.config.content);
 	};
-	
+
 	// append wrap to body
     this.append = function () {
 		$('body').append(self.config.template);
-		
+
 		self.$wrapper = $('.missile-box-wrap');
 		self.$overlay = $('.missile-box-overlay');
 		self.$header= self.$wrapper.find('.m-box-header');
 		self.$content = self.$wrapper.find('.m-box-container');
     };
-	
+
 	// reset box position
 	this.setPosition = function () {
 		self.$wrapper.css({
@@ -91,24 +91,24 @@ module.exports = function(options) {
 			left: '50%',
 			marginLeft: -(self.config.width / 2)
 		});
-		
+
 		if (self.config.enableOverlay) {
 			self.$overlay.css({
-				width: $(window).width(),
-				height: $(window).height()
+				width: $(document).width(),
+				height: $(document).height()
 			});
 		} else {
 			self.$overlay.remove();
 		}
 	};
-	
+
 	// set box container
 	this.setBox = function () {
 		self.$content.css({
 			height: self.config.height - self.$header.outerHeight()
 		});
 	};
-	
+
 	// box util
 	this.util = {
 		show: function () {
@@ -117,24 +117,24 @@ module.exports = function(options) {
 		fadeIn: function () {
 			self.$wrapper.fadeIn();
 		},
-		
+
 		// clear if exists
 		clear: function () {
 			$('.missile-box-overlay, .missile-box-wrap').remove();
 		}
 	};
-	
+
 	this.bindActions = function () {
 		if (self.config.debug) {
 			console.log('debug:bindActions');
 		}
 		self.$wrapper.find('.m-box-close').click(self.methods.close);
-		
+
 		// btn-ok
 		self.$wrapper.find('.btn-ok').click(function(e){
 			self.config.ok.call(self, e);
 		});
-		
+
 		// btn-cancel
 		self.$wrapper.find('.btn-cancel').click(function(e){
 			if (self.config.whenCancleFireClose) {
@@ -143,7 +143,7 @@ module.exports = function(options) {
 			self.config.cancel.call(self, e);
 		});
 	};
-	
+
 	this.render = function () {
 		self.init();
 		self.util.clear();
@@ -156,21 +156,21 @@ module.exports = function(options) {
 			case 'default': self.util.show(); break;
 			case 'fadeIn': self.util.fadeIn(); break;
 		}
-		
+
 		self.bindActions();
-		
+
 		if (self.config.time) {
 			setTimeout(function(){
 				self.methods.close();
 			}, self.config.time);
 		}
-		
+
 		self.config.done.call(self, $('.m-box-container'), self.methods);
-		
+
 		if (self.config.debug) {
 			console.log('debug:render');
 		}
-		
+
 		// listen scroll event
 		var resizeStart = Date.now();
 		var wait = 1 * 1000;
@@ -180,7 +180,7 @@ module.exports = function(options) {
 				self.setPosition.call(this);
 			}
 		});
-		
+
 		if (self.config.escClose) {
 			$(window).keydown(function(e){
 				var tag = e.target.tagName.toLowerCase();
@@ -197,16 +197,16 @@ module.exports = function(options) {
 			});
 		}
 	};
-	
+
 	// methods
 	this.methods = {
 		close: function () {
 			self.util.clear();
 		}
 	};
-	
+
 	this.render.call(this);
-	
+
 	function getTpl () {
 		return '\
 		<div class="missile-box-overlay"></div>\
@@ -222,7 +222,7 @@ module.exports = function(options) {
 
 	function getTplByType (o) {
 		var _dialog = '$content';
-		
+
 		var _confirm = '\
 		<div class="m-box-content">\
 			<h2>$subTitle</h2>\
@@ -231,7 +231,7 @@ module.exports = function(options) {
 				<button class="btn btn-cancel">$cancelText</button>\
 			</div>\
 		</div>';
-		
+
 		var _alert = '\
 		<div class="m-box-content">\
 			<h2>$subTitle</h2>\
@@ -239,7 +239,7 @@ module.exports = function(options) {
 				<button class="btn btn-ok">$okText</button>\
 			</div>\
 		</div>';
-		
+
 		var tpl = null;
 		switch (o.config.type) {
 			case 'alert': tpl = _alert; break;
@@ -251,5 +251,7 @@ module.exports = function(options) {
 			.replace('$okText', o.config.okText)
 			.replace('$cancelText', o.config.cancelText);
 	}
+
+    return this.methods;
 };
 
