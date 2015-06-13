@@ -1,7 +1,11 @@
 'use strict';
 
-if (typeof require != 'undefined') {
-	var $ = require('jquery');
+if (typeof jQuery === 'undefined') {
+    if (typeof require != 'undefined') {
+        var $ = require('jquery');
+    }
+} else {
+    $ = jQuery;
 }
 
 module.exports = function(options) {
