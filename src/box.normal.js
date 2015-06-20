@@ -1,13 +1,5 @@
 'use strict';
 
-if (typeof jQuery === 'undefined') {
-    if (typeof require != 'undefined') {
-        var $ = require('jquery');
-    }
-} else {
-    $ = jQuery;
-}
-
 window.Box = function(options) {
     var defaults = {
         title: 'Message Tips',
