@@ -1,6 +1,6 @@
 {
   "name": "missile-box",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Flat, responsive, lightweight, fast, easy customizable modal window plugin.",
   "main": "index.js",
   "scripts": {
